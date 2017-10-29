@@ -41,6 +41,7 @@ public class MyDBFunctions extends SQLiteOpenHelper {
 
     }
 
+    //--------add data to table--------
     void addToTable(Model model){
 
         SQLiteDatabase sql= this.getWritableDatabase();
@@ -55,6 +56,7 @@ public class MyDBFunctions extends SQLiteOpenHelper {
 
     }
 
+    //--------array list ----------
     String[] my_data(){
 
         SQLiteDatabase sq=this.getReadableDatabase();
@@ -79,6 +81,50 @@ public class MyDBFunctions extends SQLiteOpenHelper {
         return data;
     }
 
+
+    //----------------- fetch name-----------
+
+    String fetch_name(int position){
+
+        SQLiteDatabase sqd=this.getReadableDatabase();
+
+        String q="SELECT "+TAB_NAME+" FROM "+TABLE_NAME+" WHERE "+TAB_ID+" = "+position;
+
+        Cursor cursor=sqd.rawQuery(q,null);
+
+        String name="";
+        cursor.moveToFirst();
+        if (cursor.moveToFirst()){
+            name= cursor.getString(cursor.getColumnIndex(TAB_NAME));
+
+        }
+        return name;
+    }
+
+
+    //----------name update---------
+
+    int name_update(int position,String name) {
+
+
+        SQLiteDatabase sqd=this.getWritableDatabase();
+
+        ContentValues cv=new ContentValues();
+
+        cv.put(TAB_NAME,name);
+
+        return  sqd.update(TABLE_NAME,cv,TAB_ID+" = ? ",new String[]{position+""});
+    }
+
+    //------- delete name------
+
+    int delete(int position){
+
+        SQLiteDatabase sq=this.getWritableDatabase();
+
+        return sq.delete(TABLE_NAME,TAB_ID+" = ? ",new String[]{position+""});
+
+    }
 
 
 }
